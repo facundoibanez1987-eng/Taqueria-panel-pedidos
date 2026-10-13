@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control | Taquería El Pastorcito</title>
+    <!-- Google Fonts: Outfit y Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <div class="logo-text">
+                <h1>Taquería <span>El Pastorcito</span></h1>
+                <p>Panel de Cocina & Gestión</p>
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <button id="toggle-simulator-btn" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+                Simular Pedido
+            </button>
+            <button id="reset-board-btn" class="btn btn-danger-outline" title="Restablecer tablero">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M23 4v6h-6M1 20v-6h6" />
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <!-- KPI METRICS BAR -->
+        <section class="kpi-container" aria-label="Métricas de rendimiento">
+            <div class="kpi-card" id="kpi-active">
+                <div class="kpi-icon icon-blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                </div>
+                <div class="kpi-info">
+                    <span class="kpi-label">Pedidos Activos</span>
+                    <span class="kpi-value" id="val-active">0</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpi-time">
+                <div class="kpi-icon icon-orange">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
+                </div>
+                <div class="kpi-info">
+                    <span class="kpi-label">Promedio de Entrega</span>
+                    <span class="kpi-value" id="val-time">0 min</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpi-revenue">
+                <div class="kpi-icon icon-green">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="12" y1="1" x2="12" y2="23" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                </div>
+                <div class="kpi-info">
+                    <span class="kpi-label">Ventas Entregadas</span>
+                    <span class="kpi-value" id="val-revenue">$0.00</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpi-popular">
+                <div class="kpi-icon icon-yellow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                </div>
+                <div class="kpi-info">
+                    <span class="kpi-label">Taco Más Vendido</span>
+                    <span class="kpi-value" id="val-popular">-</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- KANBAN BOARD -->
+        <section class="kanban-board" aria-label="Tablero de pedidos">
+            <!-- COL: PENDIENTE -->
+            <div class="kanban-column col-pendiente" id="col-pendiente">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span class="indicator"></span>
+                        <h2>Pendientes</h2>
+                    </div>
+                    <span class="column-count" id="count-pendiente">0</span>
+                </div>
+                <div class="order-list" id="list-pendiente">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+
+            <!-- COL: PREPARANDO -->
+            <div class="kanban-column col-preparando" id="col-preparando">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span class="indicator"></span>
+                        <h2>En Preparación</h2>
+                    </div>
+                    <span class="column-count" id="count-preparando">0</span>
+                </div>
+                <div class="order-list" id="list-preparando">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+
+            <!-- COL: LISTO -->
+            <div class="kanban-column col-listo" id="col-listo">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span class="indicator"></span>
+                        <h2>Listos para Retirar</h2>
+                    </div>
+                    <span class="column-count" id="count-listo">0</span>
+                </div>
+                <div class="order-list" id="list-listo">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+
+            <!-- COL: ENTREGADO -->
+            <div class="kanban-column col-entregado" id="col-entregado">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span class="indicator"></span>
+                        <h2>Entregados</h2>
+                    </div>
+                    <span class="column-count" id="count-entregado">0</span>
+                </div>
+                <div class="order-list" id="list-entregado">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CUSTOMER ORDER SIMULATOR (SIDEBAR / DRAWER) -->
+    <aside id="simulator-drawer" class="simulator-drawer">
+        <div class="drawer-header">
+            <h3>Simulador de Pedidos</h3>
+            <button id="close-simulator-btn" class="btn-close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <div class="drawer-body">
+            <form id="simulator-form">
+                <div class="form-group">
+                    <label for="sim-client-name">Nombre del Cliente</label>
+                    <input type="text" id="sim-client-name" required placeholder="Ej. Sofía Gómez" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>Elegir Tacos & Platillos</label>
+                    <div class="menu-items-grid">
+                        <!-- Menu Item: Pastor -->
+                        <div class="menu-item-card" data-item="pastor" data-price="45">
+                            <div class="item-name">Taco al Pastor</div>
+                            <div class="item-price">$45.00</div>
+                            <div class="quantity-selector">
+                                <button type="button" class="btn-qty btn-minus">-</button>
+                                <span class="qty-val">0</span>
+                                <button type="button" class="btn-qty btn-plus">+</button>
+                            </div>
+                            <div class="item-customs">
+                                <label><input type="checkbox" checked class="opt-cebolla"> Cebolla</label>
+                                <label><input type="checkbox" checked class="opt-cilantro"> Cilantro</label>
+                                <label><input type="checkbox" checked class="opt-pina"> Piña</label>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item: Barbacoa -->
+                        <div class="menu-item-card" data-item="barbacoa" data-price="50">
+                            <div class="item-name">Taco de Barbacoa</div>
+                            <div class="item-price">$50.00</div>
+                            <div class="quantity-selector">
+                                <button type="button" class="btn-qty btn-minus">-</button>
+                                <span class="qty-val">0</span>
+                                <button type="button" class="btn-qty btn-plus">+</button>
+                            </div>
+                            <div class="item-customs">
+                                <label><input type="checkbox" checked class="opt-cebolla"> Cebolla</label>
+                                <label><input type="checkbox" checked class="opt-cilantro"> Cilantro</label>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item: Quesabirria -->
+                        <div class="menu-item-card" data-item="quesabirria" data-price="75">
+                            <div class="item-name">Quesabirria + Consomé</div>
+                            <div class="item-price">$75.00</div>
+                            <div class="quantity-selector">
+                                <button type="button" class="btn-qty btn-minus">-</button>
+                                <span class="qty-val">0</span>
+                                <button type="button" class="btn-qty btn-plus">+</button>
+                            </div>
+                            <div class="item-customs">
+                                <label><input type="checkbox" checked class="opt-cebolla"> Cebolla</label>
+                                <label><input type="checkbox" checked class="opt-cilantro"> Cilantro</label>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item: Horchata -->
+                        <div class="menu-item-card" data-item="horchata" data-price="35">
+                            <div class="item-name">Agua de Horchata Grande</div>
+                            <div class="item-price">$35.00</div>
+                            <div class="quantity-selector">
+                                <button type="button" class="btn-qty btn-minus">-</button>
+                                <span class="qty-val">0</span>
+                                <button type="button" class="btn-qty btn-plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sim-notes">Notas Especiales</label>
+                    <textarea id="sim-notes" rows="2" placeholder="Ej. Doble limón, salsas aparte..."></textarea>
+                </div>
+
+                <div class="simulator-total">
+                    <span>Total del Pedido:</span>
+                    <span id="sim-total-val">$0.00</span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Enviar a Cocina
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- ORDER DETAIL MODAL -->
+    <div id="order-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-area">
+                    <span class="modal-order-id" id="modal-order-id">#1024</span>
+                    <h3 id="modal-client-name">Cliente: Sofía Gómez</h3>
+                </div>
+                <button id="close-modal-btn" class="btn-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-status-bar">
+                    <span>Estado actual: </span>
+                    <span class="status-badge" id="modal-status-badge">Preparando</span>
+                </div>
+                
+                <div class="modal-section">
+                    <h4>Detalle de Productos</h4>
+                    <ul class="modal-items-list" id="modal-items-list">
+                        <!-- Items will be injected here -->
+                    </ul>
+                </div>
+
+                <div class="modal-section" id="modal-section-notes">
+                    <h4>Notas Especiales</h4>
+                    <p class="modal-notes-text" id="modal-notes-text">-</p>
+                </div>
+
+                <div class="modal-info-grid">
+                    <div>
+                        <span class="info-label">Hora del pedido</span>
+                        <span class="info-value" id="modal-time-start">20:50</span>
+                    </div>
+                    <div>
+                        <span class="info-label">Tiempo transcurrido</span>
+                        <span class="info-value text-timer" id="modal-time-elapsed">03:15 min</span>
+                    </div>
+                    <div>
+                        <span class="info-label">Costo Total</span>
+                        <span class="info-value" id="modal-total-price">$0.00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="modal-actions">
+                <!-- Action buttons will be injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound settings overlay / audio permission prompt -->
+    <div id="audio-prompt" class="audio-prompt">
+        <p>Haga clic en la pantalla para activar las alertas de sonido de cocina 🔊</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
